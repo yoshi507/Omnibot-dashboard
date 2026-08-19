@@ -28,9 +28,10 @@ jobs:
         env:
           VITE_BASE: /Omnibot-dashboard/
           VITE_API_BASE_URL: http://78.154.103.20:13893
-          VITE_DISCORD_CLIENT_ID: ${{ secrets.VITE_DISCORD_CLIENT_ID }}
+          VITE_DISCORD_CLIENT_ID: "1538542627882799155"
           VITE_OAUTH_REDIRECT_URI: https://yoshi507.github.io/Omnibot-dashboard/
           VITE_USE_MOCK: "false"
+          VITE_DISCORD_INVITE_URL: https://discord.com/oauth2/authorize?client_id=1538542627882799155
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

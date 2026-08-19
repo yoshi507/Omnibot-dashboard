@@ -9,6 +9,7 @@ import { OverviewPage } from './pages/OverviewPage'
 import { FeatureSettingsPage } from './pages/FeatureSettingsPage'
 import { OAuthQueryCatcher } from './components/OAuthQueryCatcher'
 import { TermsPage, PrivacyPage } from './pages/LegalPages'
+import { AppealsPublicPage } from './pages/AppealsPublicPage'
 
 function Protected({ children }) {
   const { isAuthenticated, loading } = useAuth()
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="/auth/callback" element={<AuthCallbackPage />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/appeals" element={<AppealsPublicPage />} />
             <Route path="/" element={<Protected><ServerProvider><AppLayout /></ServerProvider></Protected>}>
               <Route index element={<OverviewPage />} />
               <Route path="features/:categoryId" element={<FeatureSettingsPage />} />
