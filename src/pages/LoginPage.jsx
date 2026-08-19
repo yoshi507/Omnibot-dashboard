@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { Alert } from '../components/ui/Alert'
 import { env } from '../config/env'
+import { AddToDiscordButton } from '../components/AddToDiscordButton'
 
 export function LoginPage() {
   const { login, loading, error } = useAuth()
@@ -10,7 +11,7 @@ export function LoginPage() {
   const [localError, setLocalError] = useState(null)
   const sessionExpired = useMemo(() => params.get('reason') === 'session_expired', [params])
   const configError = !env.discordClientId
-    ? 'Dashboard build is missing VITE_DISCORD_CLIENT_ID (public Discord application client ID). Add it as a GitHub Actions secret and redeploy.'
+    ? 'Discord client ID is not configured.'
     : !env.apiBaseUrl
       ? 'API base URL is not configured.'
       : null
@@ -31,7 +32,7 @@ export function LoginPage() {
           🤖
         </div>
         <h1>{env.appName}</h1>
-        <p className="muted">Manage OmniBot for servers you own or can administer.</p>
+        <p className="muted">Manage OmniBot for servers you administer — or submit a ban appeal.</p>
         {sessionExpired ? (
           <Alert type="warning">Your session expired. Please log in again.</Alert>
         ) : null}
@@ -46,13 +47,19 @@ export function LoginPage() {
         >
           {loading ? 'Redirecting…' : 'Login with Discord'}
         </button>
+        <AddToDiscordButton
+          className="btn btn-secondary"
+          style={{ width: '100%', marginTop: '0.75rem', display: 'inline-flex' }}
+        />
         <p className="muted" style={{ fontSize: '0.8rem', marginTop: '1rem' }}>
-          Bot tokens and OAuth client secrets never ship in this website.
+          Bot tokens and OAuth secrets never ship in this website.
         </p>
         <p className="muted" style={{ fontSize: '0.75rem' }}>
-          <a href="#/terms">Terms</a>
+          <Link to="/appeals">Submit an appeal</Link>
           {' · '}
-          <a href="#/privacy">Privacy</a>
+          <Link to="/terms">Terms</Link>
+          {' · '}
+          <Link to="/privacy">Privacy</Link>
         </p>
       </div>
     </div>

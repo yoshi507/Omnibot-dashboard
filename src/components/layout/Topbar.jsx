@@ -1,9 +1,10 @@
 import { useAuth } from '../../contexts/AuthContext'
 import { useServer } from '../../contexts/ServerContext'
 import { useTheme } from '../../contexts/ThemeContext'
+import { AddToDiscordButton } from '../AddToDiscordButton'
 
 export function Topbar({ onMenu }) {
-  const { user, logout, isMock } = useAuth()
+  const { user, logout } = useAuth()
   const { guilds, selectedId, setSelectedId, selected, clearSelection } = useServer()
   const { theme, toggle } = useTheme()
   return (
@@ -28,7 +29,7 @@ export function Topbar({ onMenu }) {
         {selected ? <span className="badge badge-success">Manage access</span> : null}
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-        {isMock ? <span className="badge badge-warning">Mock mode</span> : null}
+        <AddToDiscordButton className="btn btn-secondary" />
         <button type="button" className="btn btn-ghost" onClick={toggle} aria-label="Toggle theme">
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
