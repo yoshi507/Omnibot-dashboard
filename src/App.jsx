@@ -7,6 +7,7 @@ import { LoginPage } from './pages/LoginPage'
 import { AuthCallbackPage } from './pages/AuthCallbackPage'
 import { OverviewPage } from './pages/OverviewPage'
 import { FeatureSettingsPage } from './pages/FeatureSettingsPage'
+import { OAuthQueryCatcher } from './components/OAuthQueryCatcher'
 
 function Protected({ children }) {
   const { isAuthenticated, loading } = useAuth()
@@ -20,6 +21,7 @@ export default function App() {
     <ThemeProvider>
       <AuthProvider>
         <HashRouter>
+          <OAuthQueryCatcher />
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/auth/callback" element={<AuthCallbackPage />} />

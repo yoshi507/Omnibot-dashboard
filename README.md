@@ -25,30 +25,23 @@ Open the URL Vite prints. Click **Continue with demo account** (mock mode).
 
 ## GitHub Pages deploy
 
-1. Push this repo to `yoshi507/omnibot-dashboard`.
-2. Build:
+1. In the repo: **Settings → Pages → Source: GitHub Actions**
+2. Push to `main` (or run the **Deploy to GitHub Pages** workflow manually)
+3. Site URL: `https://yoshi507.github.io/Omnibot-dashboard/`
 
-```bash
-npm install
-npm run build
-```
+`vite.config.js` sets `base: '/Omnibot-dashboard/'` to match the repository name.
 
-3. Enable **Settings → Pages** to deploy the `dist/` folder (or use GitHub Actions).
-4. Site URL: `https://yoshi507.github.io/omnibot-dashboard/`
-
-`vite.config.js` sets `base: '/omnibot-dashboard/'`. For a user site at `https://yoshi507.github.io/` use:
+For a user site at `https://yoshi507.github.io/`:
 
 ```bash
 VITE_BASE=/ npm run build
 ```
 
-and publish `dist` to the `yoshi507.github.io` repository.
-
-HashRouter is used so routing works without server-side rewrites.
+HashRouter is used so routing works without server-side rewrites. Discord OAuth should use the site root as the redirect URI (query `?code=` is forwarded into the app).
 
 ## Environment (public)
 
-See `.env.example`.
+See `.env.example`. Never commit a real `.env` with secrets.
 
 ## Backend API
 
