@@ -10,8 +10,11 @@ function loadSession() {
     if (!raw) return null
     const data = JSON.parse(raw)
     if (data.expiresAt && data.expiresAt < Date.now()) return null
+    if (!data.accessToken) return null
     return data
-  } catch { return null }
+  } catch {
+    return null
+  }
 }
 
 export function AuthProvider({ children }) {
@@ -28,11 +31,6 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(() => {
     setError(null)
-    if (env.useMock) {
-      setLoading(true)
-      authService.exchangeCode('mock').then(setSession).catch((e) => setError(e.message)).finally(() => setLoading(false))
-      return
-    }
     window.location.href = authService.getLoginUrl()
   }, [])
 
@@ -54,19 +52,25 @@ export function AuthProvider({ children }) {
   const logout = useCallback(async () => {
     await authService.logout(session)
     setSession(null)
+    try {
+      localStorage.removeItem(env.storageKeys.selectedGuild)
+    } catch {}
   }, [session])
 
-  const value = useMemo(() => ({
-    session,
-    user: session?.user || null,
-    isAuthenticated: Boolean(session?.accessToken),
-    loading,
-    error,
-    login,
-    logout,
-    completeOAuth,
-    isMock: env.useMock,
-  }), [session, loading, error, login, logout, completeOAuth])
+  const value = useMemo(
+    () => ({
+      session,
+      user: session?.user || null,
+      isAuthenticated: Boolean(session?.accessToken),
+      loading,
+      error,
+      login,
+      logout,
+      completeOAuth,
+      isMock: false,
+    }),
+    [session, loading, error, login, logout, completeOAuth]
+  )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

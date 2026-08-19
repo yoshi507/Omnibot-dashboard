@@ -8,6 +8,7 @@ import { AuthCallbackPage } from './pages/AuthCallbackPage'
 import { OverviewPage } from './pages/OverviewPage'
 import { FeatureSettingsPage } from './pages/FeatureSettingsPage'
 import { OAuthQueryCatcher } from './components/OAuthQueryCatcher'
+import { TermsPage, PrivacyPage } from './pages/LegalPages'
 
 function Protected({ children }) {
   const { isAuthenticated, loading } = useAuth()
@@ -25,6 +26,8 @@ export default function App() {
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/auth/callback" element={<AuthCallbackPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/" element={<Protected><ServerProvider><AppLayout /></ServerProvider></Protected>}>
               <Route index element={<OverviewPage />} />
               <Route path="features/:categoryId" element={<FeatureSettingsPage />} />
