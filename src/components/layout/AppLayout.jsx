@@ -2,19 +2,35 @@ import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
 import { Topbar } from './Topbar'
-import { SettingsProvider } from '../../contexts/SettingsContext'
+import { useServer } from '../../contexts/ServerContext'
+import { ServerSelectPage } from '../../pages/ServerSelectPage'
 
 export function AppLayout() {
-  const [menuOpen, setMenuOpen] = useState(false)
-  return (
-    <SettingsProvider>
-      <div className="app-shell">
-        <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
-        <div className="main">
-          <Topbar onMenu={() => setMenuOpen(true)} />
-          <main className="content"><Outlet /></main>
-        </div>
+  const [open, setOpen] = useState(false)
+  const { needsServerSelection, loading, loadedOnce } = useServer()
+
+  if (!loadedOnce && loading) {
+    return (
+      <div className="login-page">
+        <div className="card">Loading your servers…</div>
       </div>
-    </SettingsProvider>
+    )
+  }
+
+  if (needsServerSelection) {
+    return <ServerSelectPage />
+  }
+
+  return (
+    <div className="app-shell">
+      {open ? <div className="backdrop" onClick={() => setOpen(false)} aria-hidden /> : null}
+      <Sidebar open={open} onClose={() => setOpen(false)} />
+      <div className="main">
+        <Topbar onMenu={() => setOpen(true)} />
+        <main className="content">
+          <Outlet />
+        </main>
+      </div>
+    </div>
   )
 }

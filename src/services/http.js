@@ -19,8 +19,15 @@ export async function apiRequest(path, options = {}) {
     body: options.body ? JSON.stringify(options.body) : undefined,
   })
   if (res.status === 401) {
-    const err = new Error('Session expired')
+    try {
+      localStorage.removeItem(env.storageKeys.session)
+      localStorage.removeItem(env.storageKeys.selectedGuild)
+    } catch {}
+    const err = new Error('Your session expired. Please log in again.')
     err.code = 'UNAUTHORIZED'
+    if (typeof window !== 'undefined' && !window.location.hash.includes('/login')) {
+      window.location.hash = '#/login?reason=session_expired'
+    }
     throw err
   }
   if (!res.ok) {
