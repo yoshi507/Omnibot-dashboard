@@ -1,0 +1,107 @@
+.server-select-page {
+  min-height: 100vh;
+  padding: 1.25rem;
+  background: radial-gradient(ellipse at top, color-mix(in srgb, var(--primary) 22%, transparent), transparent 55%), var(--bg);
+}
+.server-select-inner {
+  width: min(920px, 100%);
+  margin: 0 auto;
+}
+.server-select-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+.server-select-brand {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+}
+.server-select-logo {
+  font-size: 2rem;
+  line-height: 1;
+}
+.server-select-header h1 {
+  margin: 0 0 0.35rem;
+  font-size: 1.45rem;
+}
+.server-select-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.server-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.85rem;
+}
+.server-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-align: left;
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.12s ease, background 0.15s ease;
+  width: 100%;
+  font: inherit;
+}
+.server-card:hover,
+.server-card:focus-visible {
+  border-color: var(--primary);
+  background: var(--bg-hover);
+  outline: none;
+  transform: translateY(-1px);
+}
+.server-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.server-icon-fallback {
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--primary) 35%, var(--bg));
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.server-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+.server-card-name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.server-empty {
+  text-align: left;
+  padding: 1.25rem;
+}
+.server-empty h2 {
+  margin-top: 0;
+}
+.server-empty-list {
+  padding-left: 1.2rem;
+  margin: 0.75rem 0 1rem;
+}
+@media (max-width: 600px) {
+  .server-grid {
+    grid-template-columns: 1fr;
+  }
+  .server-select-header {
+    flex-direction: column;
+  }
+}
