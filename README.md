@@ -25,19 +25,16 @@ Open the URL Vite prints. Click **Continue with demo account** (mock mode).
 
 ## GitHub Pages deploy
 
-1. In the repo: **Settings → Pages → Source: GitHub Actions**
-2. Push to `main` (or run the **Deploy to GitHub Pages** workflow manually)
-3. Site URL: `https://yoshi507.github.io/Omnibot-dashboard/`
+**Important:** Pages must use **GitHub Actions**, not “Deploy from a branch”.
+The source `index.html` is a Vite entry point and is not a finished static site until `npm run build` runs.
 
-`vite.config.js` sets `base: '/Omnibot-dashboard/'` to match the repository name.
+1. Repo **Settings → Pages → Build and deployment → Source: GitHub Actions**
+2. Push to `main` (or run workflow **Deploy to GitHub Pages** manually)
+3. Site: `https://yoshi507.github.io/Omnibot-dashboard/`
 
-For a user site at `https://yoshi507.github.io/`:
+The workflow builds with `VITE_BASE=/Omnibot-dashboard/` and publishes the `dist/` folder.
 
-```bash
-VITE_BASE=/ npm run build
-```
-
-HashRouter is used so routing works without server-side rewrites. Discord OAuth should use the site root as the redirect URI (query `?code=` is forwarded into the app).
+Do **not** re-enable the old “Deploy static content to Pages” workflow — it uploaded the unbuilt repository and broke the site.
 
 ## Environment (public)
 
