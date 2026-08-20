@@ -1,4 +1,7 @@
-name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages (backup only)
+
+# Primary production dashboard is served by OmniBot at http://HOST:PORT/
+# This workflow is an optional backup only.
 
 on:
   push:
@@ -23,25 +26,8 @@ jobs:
         with:
           node-version: "20"
       - run: npm install
-      # Production API URL is injected HERE (not from .env.example).
-      # Vite bakes VITE_* into the static bundle at build time.
-      #
-      # IMPORTANT: Port 13893 on 78.154.103.20 currently speaks PLAIN HTTP only.
-      # https://78.154.103.20:13893 fails with TLS "wrong version number".
-      # Do NOT change this to https:// until OmniBot (or a reverse proxy) actually
-      # serves TLS on that URL — otherwise the dashboard will break harder.
-      #
-      # After real HTTPS is enabled on the API, update VITE_API_BASE_URL below
-      # to the working https:// origin and redeploy Pages.
-      - name: Build
-        run: npm run build
-        env:
-          VITE_BASE: /Omnibot-dashboard/
-          VITE_API_BASE_URL: http://78.154.103.20:13893
-          VITE_DISCORD_CLIENT_ID: "1538542627882799155"
-          VITE_OAUTH_REDIRECT_URI: https://yoshi507.github.io/Omnibot-dashboard/
-          VITE_USE_MOCK: "false"
-          VITE_DISCORD_INVITE_URL: https://discord.com/oauth2/authorize?client_id=1538542627882799155
+      - name: Build (GitHub Pages backup — not primary production)
+        run: npm run build:pages
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

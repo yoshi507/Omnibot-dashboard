@@ -8,9 +8,6 @@ export const authService = {
         'Discord OAuth is not configured (missing VITE_DISCORD_CLIENT_ID).'
       )
     }
-    if (!env.apiBaseUrl) {
-      throw new Error('API base URL is not configured.')
-    }
     const params = new URLSearchParams({
       client_id: env.discordClientId,
       response_type: 'code',

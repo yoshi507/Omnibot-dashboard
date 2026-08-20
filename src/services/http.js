@@ -1,23 +1,24 @@
 import { env } from '../config/env'
 
 export async function apiRequest(path, options = {}) {
-  if (!env.apiBaseUrl) {
+  if (env.apiBaseUrl === undefined || env.apiBaseUrl === null) {
     const err = new Error('API base URL not configured')
     err.code = 'NO_API'
     throw err
   }
 
-  const base = env.apiBaseUrl.replace(/\/$/, '')
-  const url = `${base}${path}`
+  const base = String(env.apiBaseUrl).replace(/\/$/, '')
+  const url = `${base}${path.startsWith('/') ? path : `/${path}`}`
 
   if (
+    base &&
     typeof window !== 'undefined' &&
     window.location.protocol === 'https:' &&
     base.startsWith('http://')
   ) {
     const err = new Error(
-      'Cannot reach the OmniBot API from this HTTPS page over plain HTTP (browser mixed-content block). ' +
-        'Use the same-origin dashboard on the API host (http://78.154.103.20:13893/) or put the API behind HTTPS.'
+      'Cannot reach the OmniBot API from this HTTPS page over plain HTTP (mixed content). ' +
+        'Open the dashboard on the OmniBot host (same origin), e.g. http://78.154.103.20:13893/'
     )
     err.code = 'MIXED_CONTENT'
     throw err
@@ -41,7 +42,7 @@ export async function apiRequest(path, options = {}) {
   } catch (networkErr) {
     const err = new Error(
       networkErr?.message === 'Failed to fetch'
-        ? 'Failed to fetch the OmniBot API. If you are on GitHub Pages (HTTPS), the browser may block HTTP API calls. Open the dashboard via the API host or enable HTTPS on the API.'
+        ? 'Failed to reach the OmniBot API. Open the dashboard from the bot host URL (same origin) if you were using GitHub Pages.'
         : networkErr?.message || 'Network error'
     )
     err.code = 'NETWORK'

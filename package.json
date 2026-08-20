@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:same-origin": "VITE_BASE=/ VITE_API_BASE_URL= VITE_USE_MOCK=false VITE_DISCORD_CLIENT_ID=1538542627882799155 vite build",
+    "build:pages": "VITE_BASE=/Omnibot-dashboard/ VITE_API_BASE_URL=http://78.154.103.20:13893 VITE_USE_MOCK=false vite build",
     "preview": "vite preview"
   },
   "dependencies": {
