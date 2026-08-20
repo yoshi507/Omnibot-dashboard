@@ -6,6 +6,23 @@ export async function apiRequest(path, options = {}) {
     err.code = 'NO_API'
     throw err
   }
+
+  const base = env.apiBaseUrl.replace(/\/$/, '')
+  const url = `${base}${path}`
+
+  if (
+    typeof window !== 'undefined' &&
+    window.location.protocol === 'https:' &&
+    base.startsWith('http://')
+  ) {
+    const err = new Error(
+      'Cannot reach the OmniBot API from this HTTPS page over plain HTTP (browser mixed-content block). ' +
+        'Use the same-origin dashboard on the API host (http://78.154.103.20:13893/) or put the API behind HTTPS.'
+    )
+    err.code = 'MIXED_CONTENT'
+    throw err
+  }
+
   const headers = {
     Accept: 'application/json',
     ...(options.body ? { 'Content-Type': 'application/json' } : {}),
@@ -13,11 +30,24 @@ export async function apiRequest(path, options = {}) {
   }
   const session = options.session
   if (session?.accessToken) headers.Authorization = `Bearer ${session.accessToken}`
-  const res = await fetch(`${env.apiBaseUrl.replace(/\/$/, '')}${path}`, {
-    ...options,
-    headers,
-    body: options.body ? JSON.stringify(options.body) : undefined,
-  })
+
+  let res
+  try {
+    res = await fetch(url, {
+      ...options,
+      headers,
+      body: options.body ? JSON.stringify(options.body) : undefined,
+    })
+  } catch (networkErr) {
+    const err = new Error(
+      networkErr?.message === 'Failed to fetch'
+        ? 'Failed to fetch the OmniBot API. If you are on GitHub Pages (HTTPS), the browser may block HTTP API calls. Open the dashboard via the API host or enable HTTPS on the API.'
+        : networkErr?.message || 'Network error'
+    )
+    err.code = 'NETWORK'
+    throw err
+  }
+
   if (res.status === 401) {
     try {
       localStorage.removeItem(env.storageKeys.session)
